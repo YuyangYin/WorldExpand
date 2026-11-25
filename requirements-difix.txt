@@ -1,0 +1,12 @@
+# Runtime-only dependencies for the official reference-guided Difix3D.
+torch==2.7.1
+torchvision==0.22.1
+diffusers==0.25.1
+huggingface-hub==0.25.1
+transformers==4.38.0
+peft==0.9.0
+accelerate==1.9.0
+safetensors==0.5.3
+numpy==1.26.4
+Pillow==11.3.0
+einops==0.8.0

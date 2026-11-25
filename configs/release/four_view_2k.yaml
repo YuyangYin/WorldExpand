@@ -1,0 +1,84 @@
+model_name: qwen-image-edit-2509
+pretrained_model_name_or_path: ${oc.env:MODEL_PATH,}
+pcd_render: false
+online_warp: true
+num_views: 4
+attention_policy: global
+local_attn_variant: v1
+data_config:
+  train_batch_size: 1
+  num_workers: 4
+  num_views: 4
+  img_size: 1024
+  train_files: []
+  data_root: ${oc.env:DATA_ROOT,}
+  pcd_build_h: 2048
+  pcd_build_w: 4096
+  max_pcd_points: 16000000
+  gs_scale_factor: 1.0
+  render_engine: gsplat
+  pcd_render_radius: 0.008
+  pcd_points_per_pixel: 8
+  pcd_use_fp16_cache: true
+  sky_mask_mode: skip
+  sky_cache_dir: null
+  prewarm_seg_models: true
+  recenter_first_frame: true
+  drop_text_prob: 0.1
+  rgb_circular_pad: true
+  yaw_align_mode: end_to_start
+  cube_layout: null
+gradient_accumulation_steps: 1
+train_batch_size: 1
+report_to: tensorboard
+seed: 42
+max_sequence_length: 1024
+output_dir: ${oc.env:WE_TRAIN_OUTPUT,outputs/train}
+rgb_circular_pad: true
+use_plucker: false
+plucker_trans_scale: 1.0
+use_pose_temb: false
+use_pose_film: false
+use_dist_temb: false
+pose_scale: 1.0
+pose_film_streams: end_only
+use_warp: true
+use_mask_encoder: true
+revision: null
+variant: null
+flow_shift: 6.0
+use_dynamic_shifting: false
+max_train_steps: 20000
+learning_rate: 0.0001
+scale_lr: false
+lr_scheduler: constant
+lr_warmup_steps: 10
+lr_num_cycles: 1
+lr_power: 1.0
+optimizer: AdamW
+use_8bit_adam: false
+adam_beta1: 0.9
+adam_beta2: 0.999
+adam_weight_decay: 0.01
+adam_epsilon: 1.0e-08
+max_grad_norm: 1.0
+weighting_scheme: null
+logit_mean: 0.0
+logit_std: 1.0
+mode_scale: 1.29
+logging_dir: logs
+mixed_precision: bf16
+checkpointing_steps: 100
+checkpoints_total_limit: null
+tracker_project_name: qwen-image-edit-lora-four-view-online-2k
+resume_from_checkpoint: null
+gradient_checkpointing: true
+guidance_scale: 1
+rank: 64
+lora_alpha: 64
+lora_dropout: 0.0
+lora_layers: null
+allow_tf32: true
+offload: true
+bnb_quantization_config_path: null
+local_layer_indices: 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,23,24,25,27,28,32,35,54,58,59

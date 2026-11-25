@@ -1,0 +1,39 @@
+{
+  "paths": {
+    "python": null,
+    "accelerate": null,
+    "model": "../../weights/Qwen-Image-Edit-2509",
+    "checkpoint": null,
+    "training_config": "four_view_2k.yaml",
+    "start_root": "../../examples/004bb8d7/start",
+    "warp_root": "../../examples/004bb8d7/warps",
+    "output": "../../outputs/example",
+    "train_output": "../../outputs/train",
+    "cache": "../../.cache/huggingface",
+    "train_json": null,
+    "data_root": null,
+    "accelerate_config": "accelerate.yaml",
+    "depthmaster_source": "../../external/DepthMaster",
+    "depthmaster_weights": "../../weights/DepthMaster/depthmaster.pt",
+    "hyworld_source": "../../external/HY-World-2.0",
+    "worldmirror_model": "../../weights/HY-World-2.0/HY-WorldMirror-2.0",
+    "difix_source": "../../external/Difix3D",
+    "difix_python": null,
+    "difix_weights": "../../weights/difix_ref",
+    "torch_home": "../../.cache/torch",
+    "training_moge_source": "../../external/MoGe",
+    "training_utils3d_source": "../../external/utils3d-training"
+  },
+  "case_ids": [
+    "004bb8d7"
+  ],
+  "inference": {
+    "height": 1024,
+    "width": 2048,
+    "steps": 40,
+    "true_cfg": 4.0,
+    "guidance": 1.0,
+    "num_gpus": 1
+  },
+  "path_mappings": {}
+}

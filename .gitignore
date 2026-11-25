@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.cache/
+outputs/
+*.log
+external/
+weights/
+.venv*/
+/data/
+/four_view_dataset/data*/
