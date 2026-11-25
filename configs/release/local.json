@@ -5,8 +5,8 @@
     "model": "../../weights/Qwen-Image-Edit-2509",
     "checkpoint": null,
     "training_config": "four_view_2k.yaml",
-    "start_root": "../../examples/004bb8d7/start",
-    "warp_root": "../../examples/004bb8d7/warps",
+    "start_root": "../../examples/start",
+    "warp_root": "../../examples/warps",
     "output": "../../outputs/example",
     "train_output": "../../outputs/train",
     "cache": "../../.cache/huggingface",
@@ -25,7 +25,10 @@
     "training_utils3d_source": "../../external/utils3d-training"
   },
   "case_ids": [
-    "004bb8d7"
+    "comparison-01",
+    "comparison-03",
+    "comparison-12",
+    "comparison-13"
   ],
   "inference": {
     "height": 1024,

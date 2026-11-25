@@ -14,7 +14,7 @@ export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 
 ## 1. NVS 推理
 
-随仓库提供的示例包括一张 2:1 ERP 锚点全景图（`origin.png`）、可选文本提示（`caption.txt`）和四张目标视角的预渲染 warp（`erp_aux_0.png` 至 `erp_aux_3.png`）。每张 warp 对应一张有效区域掩码（`mask_aux_0.png` 至 `mask_aux_3.png`）。[示例输入](examples/004bb8d7/)
+默认运行项目主页对比区的四个场景，目录名为 `comparison-01`、`comparison-03`、`comparison-12`、`comparison-13`。每个场景的 2:1 ERP 锚点全景图位于 `examples/start/<case-id>/origin.png`，四组预渲染 warp（`erp_aux_0.png` 至 `erp_aux_3.png`）及对应的有效区域掩码（`mask_aux_0.png` 至 `mask_aux_3.png`）位于 `examples/warps/<case-id>/`。这些 warp 使用发布流程从对应锚点图生成。如需文本提示，可在锚点图旁放置 `caption.txt`。[示例输入](examples/) · [项目主页对比](https://yuyangyin.github.io/WorldExpand_web/#results)
 
 ```bash
 python scripts/run.py infer
@@ -22,8 +22,8 @@ python scripts/run.py infer
 
 | 输出 | 内容 |
 | --- | --- |
-| `outputs/example/004bb8d7/aux_0/output.png` 至 `aux_3/output.png` | 按输入 warp 顺序排列的四张新视角全景 |
-| `outputs/example/004bb8d7/four_view_grid.jpg` | 锚点图、warp 与生成图的对照预览 |
+| `outputs/example/<case-id>/aux_0/output.png` 至 `aux_3/output.png` | 按输入 warp 顺序排列的四张新视角全景 |
+| `outputs/example/<case-id>/four_view_grid.jpg` | 锚点图、warp 与生成图的对照预览 |
 | `outputs/example/inference.log` 和 `outputs/example/result.json` | 推理日志和运行状态 |
 
 ## 2. 三维重建
@@ -32,11 +32,11 @@ python scripts/run.py infer
 
 ```bash
 python scripts/run.py expand \
-  --image examples/004bb8d7/start/004bb8d7/origin.png \
-  --output outputs/expand-004bb8d7
+  --image examples/start/comparison-01/origin.png \
+  --output outputs/expand-comparison-01
 ```
 
-| `outputs/expand-004bb8d7/` 下的输出 | 内容 |
+| `outputs/expand-comparison-01/` 下的输出 | 内容 |
 | --- | --- |
 | `depth/` 和 `warp/` | 锚点径向深度、渲染得到的 warp 与掩码、相机元数据 |
 | `nvs/` | 四张生成的全景图 |

@@ -1,6 +1,6 @@
 # 发布验证 · 2026-11-25
 
-用随包附带的 `004bb8d7` 在 NVIDIA H20 上运行 `scripts/run.py expand`。从单张全景
+用当时随包附带的 `004bb8d7` 在 NVIDIA H20 上运行 `scripts/run.py expand`。从单张全景
 开始，DepthMaster、选点与 warp、四视图 NVS、WorldMirror 2.0、3DGS＋Difix 五阶段
 均通过。DepthMaster 和 WorldMirror 权重的 SHA-256 均与官方记录一致。
 
@@ -23,7 +23,7 @@
 
 ## 既有 NVS 验证 · 2026-11-19
 
-使用随附预渲染 warp/mask 和自训 checkpoint-6400 完成 8 步四视图联合生成。
+使用当时随附的预渲染 warp/mask 和自训 checkpoint-6400 完成 8 步四视图联合生成。
 四张 2048×1024 输出通过解码、尺寸和像素变化检查。此路径对应发布入口 `infer`。
 
 ## 目录重命名与依赖合并复测 · 2026-11-25

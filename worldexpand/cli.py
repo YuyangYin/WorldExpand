@@ -126,7 +126,7 @@ def run_inference(args, cfg):
     paths = cfg['paths']
     output = Path(args.output or paths.get('output', REPO_ROOT / 'outputs/example')).expanduser().resolve()
     output.mkdir(parents=True, exist_ok=True)
-    case_ids = args.case_id or cfg.get('case_ids', ['004bb8d7'])
+    case_ids = args.case_id or cfg.get('case_ids', ['comparison-01'])
     argv, record = prepare_inference(cfg, output, case_ids,
                                     {'steps': args.steps, 'height': args.height, 'width': args.width,
                                      'num_gpus': args.num_gpus})

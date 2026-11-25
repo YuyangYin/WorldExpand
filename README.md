@@ -14,7 +14,7 @@ export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 
 ## 1. NVS inference
 
-The bundled example supplies one 2:1 equirectangular panorama (`origin.png`), an optional text prompt (`caption.txt`), and four target-view warps (`erp_aux_0.png` through `erp_aux_3.png`). Each warp has a matching validity mask (`mask_aux_0.png` through `mask_aux_3.png`). [Example inputs](examples/004bb8d7/)
+The default run processes four scenes from the project homepage comparisons, with case IDs `comparison-01`, `comparison-03`, `comparison-12`, and `comparison-13`. Each case has a 2:1 equirectangular anchor at `examples/start/<case-id>/origin.png` and four target-view warps (`erp_aux_0.png` through `erp_aux_3.png`) with matching validity masks (`mask_aux_0.png` through `mask_aux_3.png`) under `examples/warps/<case-id>/`. The warps were rendered from these anchors using the release pipeline. To supply a text prompt, place `caption.txt` beside the anchor. [Example inputs](examples/) · [Project comparisons](https://yuyangyin.github.io/WorldExpand_web/#results)
 
 ```bash
 python scripts/run.py infer
@@ -22,8 +22,8 @@ python scripts/run.py infer
 
 | Output | Contents |
 | --- | --- |
-| `outputs/example/004bb8d7/aux_0/output.png` through `aux_3/output.png` | Four novel-view panoramas in input warp order |
-| `outputs/example/004bb8d7/four_view_grid.jpg` | Preview of the anchor, warps, and generated views |
+| `outputs/example/<case-id>/aux_0/output.png` through `aux_3/output.png` | Four novel-view panoramas in input warp order |
+| `outputs/example/<case-id>/four_view_grid.jpg` | Preview of the anchor, warps, and generated views |
 | `outputs/example/inference.log` and `outputs/example/result.json` | Inference log and run status |
 
 ## 2. 3D reconstruction
@@ -32,11 +32,11 @@ Start with one 2:1 equirectangular panorama and a new or empty output directory.
 
 ```bash
 python scripts/run.py expand \
-  --image examples/004bb8d7/start/004bb8d7/origin.png \
-  --output outputs/expand-004bb8d7
+  --image examples/start/comparison-01/origin.png \
+  --output outputs/expand-comparison-01
 ```
 
-| Output under `outputs/expand-004bb8d7/` | Contents |
+| Output under `outputs/expand-comparison-01/` | Contents |
 | --- | --- |
 | `depth/` and `warp/` | Anchor radial depth, rendered warps and masks, and camera metadata |
 | `nvs/` | Four synthesized panoramas |
