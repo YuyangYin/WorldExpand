@@ -1,18 +1,12 @@
-# Installation and model downloads / 安装与模型下载
+# Installation and model downloads
 
-Run the commands from the release root. Use Linux with an NVIDIA driver, a CUDA 12.x toolkit (including `nvcc`), and a C++ compiler. WorldExpand uses Python 3.11, PyTorch 2.7.1, and torchvision 0.22.1. Difix runs in a separate environment with an older diffusers release. Match the CUDA extensions to the main environment’s PyTorch ABI.
+[简体中文](INSTALL.zh-CN.md) · [WorldExpand](README.md)
 
-以下命令从发布目录运行。主流程用 Python 3.11、PyTorch 2.7.1 和 torchvision 0.22.1。
-在 Linux 上准备 NVIDIA 驱动、CUDA 12.x Toolkit（含 `nvcc`）和 C++ 编译器。
-主环境运行 DepthMaster、Qwen、WorldMirror 和 3DGS，独立的 Difix 环境使用旧版 diffusers，
-两个进程只交换 PNG。CUDA 扩展需与主环境的 PyTorch ABI 一致。
+Run these commands from the repository root on Linux. You need Python 3.11, an NVIDIA driver, a CUDA 12.x Toolkit with `nvcc`, and a C++ compiler. WorldExpand uses PyTorch 2.7.1 and torchvision 0.22.1. Difix runs in its own environment with an older diffusers release. Build CUDA extensions against the PyTorch ABI in the WorldExpand environment.
 
-## 1. Download public source code / 下载公开源码
+## 1. Download public source code
 
-The commands below download pinned source archives. Their destinations match the default release configuration.
-
-版本固定到提交或标签，可用 Git 或以下源码归档命令。默认目录与
-[configs/release/local.json](configs/release/local.json) 一致。
+Download the pinned source archives to the locations used by the default release configuration. [Release configuration](configs/release/local.json)
 
 ```bash
 set -euo pipefail
@@ -39,14 +33,9 @@ gsplat_dir=external/HY-World-2.0/hyworld2/worldgen/third_party/gsplat_maskgaussi
 fetch_source g-truc/glm 1.0.1 "$gsplat_dir/gsplat/cuda/csrc/third_party/glm"
 ```
 
-HY-World source and weights use the Tencent HY-WORLD 2.0 Community License. The upstream repositories and license are linked below.
+The upstream code comes from [DepthMaster](https://github.com/PolyU-VCLab/DepthMaster), [HY-World 2.0](https://github.com/Tencent-Hunyuan/HY-World-2.0), and [Difix3D](https://github.com/nv-tlabs/Difix3D). HY-World code and weights use the Tencent HY-WORLD 2.0 Community License. [License](https://github.com/Tencent-Hunyuan/HY-World-2.0/blob/df9988efb87bfc0f4947eb3889411cf957478b06/License.txt)
 
-源码入口对应 [DepthMaster](https://github.com/PolyU-VCLab/DepthMaster)、
-[HY-World 2.0](https://github.com/Tencent-Hunyuan/HY-World-2.0) 和
-[Difix3D](https://github.com/nv-tlabs/Difix3D)。HY-World 的源码和权重适用
-[Tencent HY-WORLD 2.0 Community License](https://github.com/Tencent-Hunyuan/HY-World-2.0/blob/df9988efb87bfc0f4947eb3889411cf957478b06/License.txt)。
-
-## 2. Create the two environments / 创建两个环境
+## 2. Create the environments
 
 ```bash
 python3.11 -m venv .venv-worldexpand
@@ -70,23 +59,16 @@ python3.11 -m venv .venv-difix
 .venv-difix/bin/python -m pip check
 ```
 
-The 3DGS optimizer uses the HY-World fork of gsplat with MaskGaussian support. Use the CUDA 12.6 defaults of the Linux PyPI PyTorch 2.7.1 wheel, or match the FlashAttention wheel and extension builds to the ABI and CUDA runtime of your PyTorch build.
+The 3DGS optimizer uses the HY-World fork of gsplat with MaskGaussian support. The Linux PyPI wheel for PyTorch 2.7.1 uses the CUDA 12.6 runtime. Match your FlashAttention wheel and compiled extensions to the CUDA runtime and ABI of your PyTorch build. [FlashAttention release](https://github.com/Dao-AILab/flash-attention/releases/tag/v2.8.0.post2)
 
-3DGS 优化器使用 HY-World 附带的 MaskGaussian gsplat。FlashAttention 安装可参考
-[官方发行页](https://github.com/Dao-AILab/flash-attention/releases/tag/v2.8.0.post2)。
-PyPI 的 PyTorch 2.7.1 Linux CUDA wheel 使用 CUDA 12.6。若使用其他 PyTorch wheel，
-按其 CUDA 版本与 C++ ABI 选择匹配的 FlashAttention wheel，并在同一主环境编译 CUDA 扩展。
+## 3. Download model weights
 
-## 3. Download model weights / 下载模型权重
+The pipeline loads weights from local paths. You can set those paths in the release configuration or override them with the corresponding `WE_*` environment variables. The author-provided WorldExpand checkpoint directory contains `lora/`, `meta.json`, and the saved mask heads.
 
-All weights are loaded locally. Override locations in the release JSON or with the corresponding `WE_*` variables. Set `checkpoint` to the author-provided Qwen checkpoint directory containing `lora/`, `meta.json`, and saved mask heads.
-
-运行时从本地读取。不同路径可在配置 JSON 里指定，或通过相应的 `WE_*` 环境变量覆盖。
-
-| Component / 组件 | Local path / 本地路径 | Config key / 配置键 | Source / 来源 |
+| Component | Local path | Config key | Source |
 | --- | --- | --- | --- |
 | Qwen base model | `weights/Qwen-Image-Edit-2509/` | `model` | [Qwen-Image-Edit-2509](https://huggingface.co/Qwen/Qwen-Image-Edit-2509/tree/d3968ef930e841f4c73640fb8afa3b306a78167e) |
-| WorldExpand LoRA and mask heads | Author-provided checkpoint directory | `checkpoint` | Provided by the authors / 作者提供 |
+| WorldExpand LoRA and mask heads | Author-provided checkpoint directory | `checkpoint` | Provided by the authors |
 | DepthMaster | `weights/DepthMaster/depthmaster.pt` | `depthmaster_weights` | [VCLab-PolyU/DepthMaster](https://huggingface.co/VCLab-PolyU/DepthMaster/tree/add341b64ae9f90372b6483b334ac496a18fe081) |
 | WorldMirror 2.0 | `weights/HY-World-2.0/HY-WorldMirror-2.0/` | `worldmirror_model` | [tencent/HY-World-2.0](https://huggingface.co/tencent/HY-World-2.0/tree/d78a16c91c7a56488894a1c8de4f5c7cc28aa8b0/HY-WorldMirror-2.0) |
 | Difix | `weights/difix_ref/` | `difix_weights` | [nvidia/difix_ref](https://huggingface.co/nvidia/difix_ref/tree/d4830559772a5795c9d136302c5b197d6418d3fb) |
@@ -109,35 +91,25 @@ export WE_CHECKPOINT=/path/to/worldexpand/checkpoint
 export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 ```
 
-SHA-256 for DepthMaster `depthmaster.pt`
-`e61e617acdd0b40bd2c217def5d60b0bd05352e6ae61d940a49c2374c6c75982`。
-SHA-256 for WorldMirror `model.safetensors`
-`9fff06539d3d9e85338d7de1ffb5afffb7739fa5bf4d62b4b7c319b5ecdde54f`。
-[DepthMaster 权重](https://huggingface.co/VCLab-PolyU/DepthMaster/blob/add341b64ae9f90372b6483b334ac496a18fe081/depthmaster.pt)
-[WorldMirror 权重](https://huggingface.co/tencent/HY-World-2.0/blob/d78a16c91c7a56488894a1c8de4f5c7cc28aa8b0/HY-WorldMirror-2.0/model.safetensors)
+| File | SHA-256 |
+| --- | --- |
+| DepthMaster `depthmaster.pt` | `e61e617acdd0b40bd2c217def5d60b0bd05352e6ae61d940a49c2374c6c75982` |
+| WorldMirror `model.safetensors` | `9fff06539d3d9e85338d7de1ffb5afffb7739fa5bf4d62b4b7c319b5ecdde54f` |
 
-Use `--no-difix` to run with the main environment alone. In this mode you can skip the Difix source, environment, and checkpoint.
+You can skip the Difix source, environment, and weights for runs with `--no-difix`.
 
-使用 `--no-difix` 时只需主环境，可以跳过 Difix 的源码、独立环境及权重。
+## 4. Prepare training
 
-## 4. Prepare training / 准备训练
-
-Four-view training uses the same main environment. Call the `fetch_source` helper from section 1 in the same shell to add the public MoGe panorama utilities and their matching `utils3d` source. The training launcher adds these two directories to the training subprocess’s `PYTHONPATH`. DepthMaster continues to use the `utils3d` installed in the main environment.
-
-四视图训练共用主环境。使用第 1 节同一终端中的 `fetch_source` 下载 MoGe 全景工具及兼容的 `utils3d` 源码。训练入口将两者加入训练子进程的 `PYTHONPATH`，DepthMaster 仍使用主环境中安装的 `utils3d`。
+Use the WorldExpand environment. Call `fetch_source` from section 1 in the same shell to download the MoGe panorama utilities and their matching `utils3d` source. The training launcher adds both directories to the training subprocess's `PYTHONPATH`. DepthMaster uses the version installed in the main environment.
 
 ```bash
 fetch_source microsoft/MoGe 0286b495230a074aadf1c76cc5c679e943e5d1c6 external/MoGe
 fetch_source EasternJournalist/utils3d c5daf6f6c244d251f252102d09e9b7bcef791a38 external/utils3d-training
 ```
 
-If you use different locations, set `training_moge_source` and `training_utils3d_source` in `paths`, or override them with `WE_TRAINING_MOGE_SOURCE` and `WE_TRAINING_UTILS3D_SOURCE`. Set `train_json` and `data_root` in your release configuration, then start training with `bash scripts/run_train.sh`. Direct calls to geometry scripts that import MoGe can use `PYTHONPATH="$PWD:$PWD/external/MoGe:$PWD/external/utils3d-training"`.
+For different source locations, set `paths.training_moge_source` and `paths.training_utils3d_source` or the corresponding `WE_TRAINING_MOGE_SOURCE` and `WE_TRAINING_UTILS3D_SOURCE` variables. Direct calls to geometry scripts that import MoGe can use `PYTHONPATH="$PWD:$PWD/external/MoGe:$PWD/external/utils3d-training"`. [Training walkthrough](README.md#3-training)
 
-若源码放在自定义目录，通过 `paths.training_moge_source`、`paths.training_utils3d_source` 或对应的 `WE_TRAINING_MOGE_SOURCE`、`WE_TRAINING_UTILS3D_SOURCE` 指定。在发布配置中设置 `train_json` 和 `data_root` 后，用 `bash scripts/run_train.sh` 启动训练。直接调用使用 MoGe 的几何脚本时，可设置上述 `PYTHONPATH`。
-
-The release training profile uses gsplat and skips external sky segmentation. Install the following extras only if you select the corresponding renderer or mask mode. Optional optimizer and logger packages include `bitsandbytes`, `deepspeed`, `prodigyopt`, and `wandb`.
-
-发布训练配置默认使用 gsplat，跳过外部天空分割。仅在切换到相应渲染或掩码模式时安装以下扩展。其他优化器及日志组件按需安装。
+The default training profile uses gsplat and skips external sky segmentation. Install the corresponding package if you select an alternative renderer or mask mode. Optional optimizer and logger packages include `bitsandbytes`, `deepspeed`, `prodigyopt`, and `wandb`.
 
 ```bash
 # PyTorch3D point rendering
@@ -152,6 +124,4 @@ fetch_source NVlabs/nvdiffrast v0.3.3 external/nvdiffrast
 .venv-worldexpand/bin/python -m pip install zim_anything==0.1
 ```
 
-For external sky segmentation, download `encoder.onnx` and `decoder.onnx` into `weights/zim_vit_l_2092/` and the Grounding DINO Tiny checkpoint into `weights/grounding-dino-tiny/`. Override the paths with `WE_ZIM_CHECKPOINT` and `WE_GD_CHECKPOINT`. The reconstruction example uses the validity masks from DepthMaster and WorldMirror. [ZIM ViT-L](https://huggingface.co/naver-iv/zim-anything-vitl/tree/b7f94faa0ff9d7c07199fab8ef6bf3b3a592116f/zim_vit_l_2092) · [Grounding DINO Tiny](https://huggingface.co/IDEA-Research/grounding-dino-tiny/tree/main)
-
-外部天空分割使用 `weights/zim_vit_l_2092/` 下的 `encoder.onnx` 和 `decoder.onnx`，以及 `weights/grounding-dino-tiny/` 下的 Grounding DINO Tiny 权重。可用 `WE_ZIM_CHECKPOINT` 和 `WE_GD_CHECKPOINT` 覆盖路径。单场景重建示例使用 DepthMaster 和 WorldMirror 输出的有效深度掩码。
+For external sky segmentation, put `encoder.onnx` and `decoder.onnx` in `weights/zim_vit_l_2092/` and the Grounding DINO Tiny checkpoint in `weights/grounding-dino-tiny/`. Use `WE_ZIM_CHECKPOINT` and `WE_GD_CHECKPOINT` to override these paths. [ZIM ViT-L](https://huggingface.co/naver-iv/zim-anything-vitl/tree/b7f94faa0ff9d7c07199fab8ef6bf3b3a592116f/zim_vit_l_2092) · [Grounding DINO Tiny](https://huggingface.co/IDEA-Research/grounding-dino-tiny/tree/main)
