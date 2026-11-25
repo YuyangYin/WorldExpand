@@ -131,9 +131,9 @@ fetch_source microsoft/MoGe 0286b495230a074aadf1c76cc5c679e943e5d1c6 external/Mo
 fetch_source EasternJournalist/utils3d c5daf6f6c244d251f252102d09e9b7bcef791a38 external/utils3d-training
 ```
 
-If you use different locations, set `training_moge_source` and `training_utils3d_source` in `paths`, or override them with `WE_TRAINING_MOGE_SOURCE` and `WE_TRAINING_UTILS3D_SOURCE`. Use the training commands in the README after configuring your data and checkpoint paths. Direct calls to geometry scripts that import MoGe can use `PYTHONPATH="$PWD:$PWD/external/MoGe:$PWD/external/utils3d-training"`.
+If you use different locations, set `training_moge_source` and `training_utils3d_source` in `paths`, or override them with `WE_TRAINING_MOGE_SOURCE` and `WE_TRAINING_UTILS3D_SOURCE`. Set `train_json` and `data_root` in your release configuration, then start training with `bash scripts/run_train.sh`. Direct calls to geometry scripts that import MoGe can use `PYTHONPATH="$PWD:$PWD/external/MoGe:$PWD/external/utils3d-training"`.
 
-若源码放在自定义目录，通过 `paths.training_moge_source`、`paths.training_utils3d_source` 或对应的 `WE_TRAINING_MOGE_SOURCE`、`WE_TRAINING_UTILS3D_SOURCE` 指定。配置数据和模型路径后按 README 的训练命令启动。直接调用使用 MoGe 的几何脚本时，可设置上述 `PYTHONPATH`。
+若源码放在自定义目录，通过 `paths.training_moge_source`、`paths.training_utils3d_source` 或对应的 `WE_TRAINING_MOGE_SOURCE`、`WE_TRAINING_UTILS3D_SOURCE` 指定。在发布配置中设置 `train_json` 和 `data_root` 后，用 `bash scripts/run_train.sh` 启动训练。直接调用使用 MoGe 的几何脚本时，可设置上述 `PYTHONPATH`。
 
 The release training profile uses gsplat and skips external sky segmentation. Install the following extras only if you select the corresponding renderer or mask mode. Optional optimizer and logger packages include `bitsandbytes`, `deepspeed`, `prodigyopt`, and `wandb`.
 
