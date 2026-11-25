@@ -3,7 +3,7 @@
     "python": null,
     "accelerate": null,
     "model": "../../weights/Qwen-Image-Edit-2509",
-    "checkpoint": null,
+    "checkpoint": "../../weights/WorldExpand/default",
     "training_config": "four_view_2k.yaml",
     "start_root": "../../examples/start",
     "warp_root": "../../examples/warps",

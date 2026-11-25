@@ -63,12 +63,12 @@ The 3DGS optimizer uses the HY-World fork of gsplat with MaskGaussian support. T
 
 ## 3. Download model weights
 
-The pipeline loads weights from local paths. You can set those paths in the release configuration or override them with the corresponding `WE_*` environment variables. The author-provided WorldExpand checkpoint directory contains `lora/`, `meta.json`, and the saved mask heads.
+The pipeline loads weights from local paths. You can set those paths in the release configuration or override them with the corresponding `WE_*` environment variables. The WorldExpand release provides two LoRA checkpoints with saved mask heads. The default is `checkpoint-6400`.
 
 | Component | Local path | Config key | Source |
 | --- | --- | --- | --- |
 | Qwen base model | `weights/Qwen-Image-Edit-2509/` | `model` | [Qwen-Image-Edit-2509](https://huggingface.co/Qwen/Qwen-Image-Edit-2509/tree/d3968ef930e841f4c73640fb8afa3b306a78167e) |
-| WorldExpand LoRA and mask heads | Author-provided checkpoint directory | `checkpoint` | Provided by the authors |
+| WorldExpand LoRA and mask heads | `weights/WorldExpand/default/` | `checkpoint` | [codeyang123/WorldExpand](https://huggingface.co/codeyang123/WorldExpand) |
 | DepthMaster | `weights/DepthMaster/depthmaster.pt` | `depthmaster_weights` | [VCLab-PolyU/DepthMaster](https://huggingface.co/VCLab-PolyU/DepthMaster/tree/add341b64ae9f90372b6483b334ac496a18fe081) |
 | WorldMirror 2.0 | `weights/HY-World-2.0/HY-WorldMirror-2.0/` | `worldmirror_model` | [tencent/HY-World-2.0](https://huggingface.co/tencent/HY-World-2.0/tree/d78a16c91c7a56488894a1c8de4f5c7cc28aa8b0/HY-WorldMirror-2.0) |
 | Difix | `weights/difix_ref/` | `difix_weights` | [nvidia/difix_ref](https://huggingface.co/nvidia/difix_ref/tree/d4830559772a5795c9d136302c5b197d6418d3fb) |
@@ -78,6 +78,8 @@ The pipeline loads weights from local paths. You can set those paths in the rele
 hf=.venv-worldexpand/bin/hf
 "$hf" download Qwen/Qwen-Image-Edit-2509 --revision d3968ef930e841f4c73640fb8afa3b306a78167e \
   --local-dir weights/Qwen-Image-Edit-2509
+"$hf" download codeyang123/WorldExpand --revision f586ed0ccc39ac7cfa7dd9f7db1b7464cc1a2324 \
+  --include 'default/*' --local-dir weights/WorldExpand
 "$hf" download VCLab-PolyU/DepthMaster depthmaster.pt --revision add341b64ae9f90372b6483b334ac496a18fe081 \
   --local-dir weights/DepthMaster
 "$hf" download tencent/HY-World-2.0 HY-WorldMirror-2.0/config.json HY-WorldMirror-2.0/model.safetensors \
@@ -87,7 +89,6 @@ hf=.venv-worldexpand/bin/hf
 mkdir -p .cache/torch/hub/checkpoints
 curl -fL --retry 2 https://download.pytorch.org/models/vgg16-397923af.pth \
   -o .cache/torch/hub/checkpoints/vgg16-397923af.pth
-export WE_CHECKPOINT=/path/to/worldexpand/checkpoint
 export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 ```
 
@@ -97,6 +98,17 @@ export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 | WorldMirror `model.safetensors` | `9fff06539d3d9e85338d7de1ffb5afffb7739fa5bf4d62b4b7c319b5ecdde54f` |
 
 You can skip the Difix source, environment, and weights for runs with `--no-difix`.
+
+### Full attention checkpoint
+
+The default checkpoint uses 30 local attention layers. The full attention variant is `checkpoint-10000` and uses global attention in every layer. Its metadata sets the attention schedule when you select the checkpoint.
+
+```bash
+.venv-worldexpand/bin/hf download codeyang123/WorldExpand --revision f586ed0ccc39ac7cfa7dd9f7db1b7464cc1a2324 \
+  --include 'full-attention/*' --local-dir weights/WorldExpand
+export WE_CHECKPOINT="$PWD/weights/WorldExpand/full-attention"
+export WE_OUTPUT="$PWD/outputs/example-full-attention"
+```
 
 ## 4. Prepare training
 

@@ -6,11 +6,10 @@
 
 ## Environment setup
 
-Create the WorldExpand and Difix environments and download the public models. Activate WorldExpand from the repository root. For the inference and reconstruction examples, set the paths to the author-provided checkpoint and the Difix interpreter. [Installation guide](INSTALL.md)
+Create the WorldExpand and Difix environments and download the public models. Activate WorldExpand from the repository root. The examples use the default WorldExpand checkpoint downloaded by the installation guide. Set the Difix interpreter for reconstruction. [Installation guide](INSTALL.md) · [Model weights](https://huggingface.co/codeyang123/WorldExpand)
 
 ```bash
 source .venv-worldexpand/bin/activate
-export WE_CHECKPOINT=/path/to/worldexpand/checkpoint
 export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 ```
 

@@ -52,6 +52,31 @@ class ReleaseConfigTests(unittest.TestCase):
                 validate_case_id(value)
         self.assertEqual(validate_case_id('case-004_bb'), 'case-004_bb')
 
+    def test_checkpoint_attention_schedule_overrides_release_profile(self):
+        from omegaconf import OmegaConf
+        from worldexpand.cli import prepare_inference
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'checkpoint/lora').mkdir(parents=True)
+            (root / 'start/case').mkdir(parents=True)
+            (root / 'warp/case').mkdir(parents=True)
+            (root / 'start/case/origin.png').touch()
+            (root / 'warp/case/erp_aux_0.png').touch()
+            (root / 'warp/case/mask_aux_0.png').touch()
+            profile = root / 'profile.yaml'
+            profile.write_text('num_views: 1\nlocal_layer_indices: "2,3"\ndata_config: {}\n')
+            cfg = {'paths': {'model': str(root), 'checkpoint': str(root / 'checkpoint'),
+                             'training_config': str(profile), 'start_root': str(root / 'start'),
+                             'warp_root': str(root / 'warp')}}
+            variants = (({}, '2,3'), ({'local_layer_indices': '1,4'}, '1,4'),
+                        ({'local_layer_indices': None}, None))
+            for meta, expected in variants:
+                with self.subTest(meta=meta):
+                    (root / 'checkpoint/meta.json').write_text(json.dumps(meta))
+                    prepare_inference(cfg, root, ['case'], {})
+                    self.assertEqual(OmegaConf.load(root / 'runtime.yaml').local_layer_indices, expected)
+
     def test_expected_outputs_require_every_view(self):
         out = expected_outputs(Path('/tmp/out'), ['case'], 4)
         self.assertEqual(len(out), 4)

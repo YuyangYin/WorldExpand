@@ -57,6 +57,9 @@ def prepare_inference(cfg, output, case_ids, overrides):
                 'local_attn_variant'):
         if key in meta and key in train_cfg and meta[key] != train_cfg[key]:
             raise ValueError(f'Checkpoint/config mismatch for {key}: {meta[key]} != {train_cfg[key]}')
+    # An explicit null selects full attention. Legacy checkpoints use the profile.
+    if 'local_layer_indices' in meta:
+        train_cfg.local_layer_indices = meta['local_layer_indices']
     views = int(train_cfg.get('num_views', 4))
     for case in case_ids:
         validate_case_id(case)

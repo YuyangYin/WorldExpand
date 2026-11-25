@@ -6,11 +6,10 @@
 
 ## 环境准备
 
-创建 WorldExpand 和 Difix 环境并下载公开模型。在仓库根目录激活 WorldExpand 环境。运行推理和重建示例前，设置作者提供的 checkpoint 路径及 Difix 解释器路径。[中文安装指南](INSTALL.zh-CN.md)
+创建 WorldExpand 和 Difix 环境并下载公开模型。在仓库根目录激活 WorldExpand 环境。示例使用安装指南下载的默认 WorldExpand checkpoint。运行重建前设置 Difix 解释器路径。[中文安装指南](INSTALL.zh-CN.md) · [模型权重](https://huggingface.co/codeyang123/WorldExpand)
 
 ```bash
 source .venv-worldexpand/bin/activate
-export WE_CHECKPOINT=/path/to/worldexpand/checkpoint
 export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 ```
 

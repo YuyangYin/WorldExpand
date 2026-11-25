@@ -63,12 +63,12 @@ python3.11 -m venv .venv-difix
 
 ## 3. 下载模型权重
 
-程序从本地加载权重。可在发布配置中指定路径，也可通过对应的 `WE_*` 环境变量覆盖。作者提供的 WorldExpand checkpoint 目录包含 `lora/`、`meta.json` 及保存的掩码分支。
+程序从本地加载权重。可在发布配置中指定路径，也可通过对应的 `WE_*` 环境变量覆盖。WorldExpand 发布了两套 LoRA 和掩码分支权重，默认使用 `checkpoint-6400`。
 
 | 组件 | 本地路径 | 配置键 | 来源 |
 | --- | --- | --- | --- |
 | Qwen 基座 | `weights/Qwen-Image-Edit-2509/` | `model` | [Qwen-Image-Edit-2509](https://huggingface.co/Qwen/Qwen-Image-Edit-2509/tree/d3968ef930e841f4c73640fb8afa3b306a78167e) |
-| WorldExpand LoRA 和掩码分支 | 作者提供的 checkpoint 目录 | `checkpoint` | 作者提供 |
+| WorldExpand LoRA 和掩码分支 | `weights/WorldExpand/default/` | `checkpoint` | [codeyang123/WorldExpand](https://huggingface.co/codeyang123/WorldExpand) |
 | DepthMaster | `weights/DepthMaster/depthmaster.pt` | `depthmaster_weights` | [VCLab-PolyU/DepthMaster](https://huggingface.co/VCLab-PolyU/DepthMaster/tree/add341b64ae9f90372b6483b334ac496a18fe081) |
 | WorldMirror 2.0 | `weights/HY-World-2.0/HY-WorldMirror-2.0/` | `worldmirror_model` | [tencent/HY-World-2.0](https://huggingface.co/tencent/HY-World-2.0/tree/d78a16c91c7a56488894a1c8de4f5c7cc28aa8b0/HY-WorldMirror-2.0) |
 | Difix | `weights/difix_ref/` | `difix_weights` | [nvidia/difix_ref](https://huggingface.co/nvidia/difix_ref/tree/d4830559772a5795c9d136302c5b197d6418d3fb) |
@@ -78,6 +78,8 @@ python3.11 -m venv .venv-difix
 hf=.venv-worldexpand/bin/hf
 "$hf" download Qwen/Qwen-Image-Edit-2509 --revision d3968ef930e841f4c73640fb8afa3b306a78167e \
   --local-dir weights/Qwen-Image-Edit-2509
+"$hf" download codeyang123/WorldExpand --revision f586ed0ccc39ac7cfa7dd9f7db1b7464cc1a2324 \
+  --include 'default/*' --local-dir weights/WorldExpand
 "$hf" download VCLab-PolyU/DepthMaster depthmaster.pt --revision add341b64ae9f90372b6483b334ac496a18fe081 \
   --local-dir weights/DepthMaster
 "$hf" download tencent/HY-World-2.0 HY-WorldMirror-2.0/config.json HY-WorldMirror-2.0/model.safetensors \
@@ -87,7 +89,6 @@ hf=.venv-worldexpand/bin/hf
 mkdir -p .cache/torch/hub/checkpoints
 curl -fL --retry 2 https://download.pytorch.org/models/vgg16-397923af.pth \
   -o .cache/torch/hub/checkpoints/vgg16-397923af.pth
-export WE_CHECKPOINT=/path/to/worldexpand/checkpoint
 export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 ```
 
@@ -97,6 +98,17 @@ export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 | WorldMirror `model.safetensors` | `9fff06539d3d9e85338d7de1ffb5afffb7739fa5bf4d62b4b7c319b5ecdde54f` |
 
 使用 `--no-difix` 时可以跳过 Difix 的源码、独立环境和权重。
+
+### Full attention 权重
+
+默认 checkpoint 使用 30 层局部注意力。Full attention 版为 `checkpoint-10000`，所有层均使用全局注意力。选择该 checkpoint 后，推理入口会从其元数据读取对应的注意力配置。
+
+```bash
+.venv-worldexpand/bin/hf download codeyang123/WorldExpand --revision f586ed0ccc39ac7cfa7dd9f7db1b7464cc1a2324 \
+  --include 'full-attention/*' --local-dir weights/WorldExpand
+export WE_CHECKPOINT="$PWD/weights/WorldExpand/full-attention"
+export WE_OUTPUT="$PWD/outputs/example-full-attention"
+```
 
 ## 4. 准备训练
 
