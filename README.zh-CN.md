@@ -1,6 +1,10 @@
-# WorldExpand
+# WorldExpand: Sparse joint panorama generation for 3D world expansion
 
 <img src="assets/tenon-logo.png" alt="Tenon logo" width="160">
+
+Yuyang Yin<sup>1,2</sup>, Chenjie Cao<sup>2,†</sup>, Xuhui Zuo<sup>2</sup>, Yuning Gong<sup>2</sup>, Pengfei Wang<sup>2</sup>, Junta Wu<sup>2</sup>, Zhenwei Wang<sup>2</sup>, Yao Zhao<sup>1</sup>, Tengfei Wang<sup>2∗</sup>, Yunchao Wei<sup>1∗</sup>, Chunchao Guo<sup>2∗</sup>
+
+<sup>1</sup> Beijing Jiaotong University · <sup>2</sup> Tencent Hunyuan
 
 [English](README.md)
 
