@@ -1,5 +1,7 @@
 # WorldExpand
 
+<img src="assets/tenon-logo.png" alt="Tenon logo" width="160">
+
 [简体中文](README.zh-CN.md)
 
 ## Environment setup
@@ -14,7 +16,7 @@ export WE_DIFIX_PYTHON="$PWD/.venv-difix/bin/python"
 
 ## 1. NVS inference
 
-The default run processes four scenes from the project homepage comparisons, with case IDs `comparison-01`, `comparison-03`, `comparison-12`, and `comparison-13`. Each case has a 2:1 equirectangular anchor at `examples/start/<case-id>/origin.png` and four target-view warps (`erp_aux_0.png` through `erp_aux_3.png`) with matching validity masks (`mask_aux_0.png` through `mask_aux_3.png`) under `examples/warps/<case-id>/`. The warps were rendered from these anchors using the release pipeline. To supply a text prompt, place `caption.txt` beside the anchor. [Example inputs](examples/) · [Project comparisons](https://yuyangyin.github.io/WorldExpand_web/#results)
+The default run processes four scenes from the project homepage, with case IDs `scene-01`, `scene-03`, `scene-12`, and `scene-13`. Each case has a 2:1 equirectangular anchor at `examples/start/<case-id>/origin.png` and four target-view warps (`erp_aux_0.png` through `erp_aux_3.png`) with matching validity masks (`mask_aux_0.png` through `mask_aux_3.png`) under `examples/warps/<case-id>/`. The warps were rendered from these anchors using the release pipeline. Each anchor comes with a `caption.txt` text prompt. To use your own prompt, edit that file. [Example inputs](examples/) · [Project homepage](https://yuyangyin.github.io/WorldExpand_web/#results)
 
 ```bash
 python scripts/run.py infer
@@ -28,15 +30,15 @@ python scripts/run.py infer
 
 ## 2. 3D reconstruction
 
-Start with one 2:1 equirectangular panorama and a new or empty output directory. The full pipeline prepares the warps, runs NVS, and reconstructs the scene.
+Start with one 2:1 equirectangular panorama and a new or empty output directory. The full pipeline prepares the warps, runs NVS, and reconstructs the scene. It reads `caption.txt` beside the input panorama when present.
 
 ```bash
 python scripts/run.py expand \
-  --image examples/start/comparison-01/origin.png \
-  --output outputs/expand-comparison-01
+  --image examples/start/scene-01/origin.png \
+  --output outputs/expand-scene-01
 ```
 
-| Output under `outputs/expand-comparison-01/` | Contents |
+| Output under `outputs/expand-scene-01/` | Contents |
 | --- | --- |
 | `depth/` and `warp/` | Anchor radial depth, rendered warps and masks, and camera metadata |
 | `nvs/` | Four synthesized panoramas |
@@ -46,7 +48,7 @@ python scripts/run.py expand \
 
 ## 3. Training
 
-Prepare the training environment and a four-view JSON manifest. Each case groups one anchor panorama with four target panoramas and their camera poses. The anchor provides RGB, camera metadata, and radial depth in EXR format. Training renders the warps online. [Training dependencies](INSTALL.md#4-prepare-training) · [Dataset preparation](four_view_dataset/)
+Prepare the training environment and a four-view JSON manifest. Each case groups one anchor panorama with four target panoramas and their camera poses. The anchor provides RGB, camera metadata, and radial depth in EXR format. Training renders the warps online. The dataset preparation script can fill missing captions from existing caption files. [Caption backfill script](four_view_dataset/step7_fill_caption.py) · [Training dependencies](INSTALL.md#4-prepare-training) · [Dataset preparation](four_view_dataset/)
 
 In the default release config, set `paths.train_json` to the manifest and `paths.data_root` to the directory containing the referenced assets. Start training from the activated WorldExpand environment. [Release config](configs/release/local.json)
 

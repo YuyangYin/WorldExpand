@@ -502,7 +502,7 @@ def _load_wild_case(start_dir, warp_dir, num_views, img_size, rgb_circular_pad,
     cap_path = os.path.join(start_dir, "caption.txt")
     caption = ""
     if os.path.exists(cap_path):
-        with open(cap_path, "r") as f:
+        with open(cap_path, encoding="utf-8") as f:
             caption = f.read().strip()
     prompt = system_prompt + caption
 

@@ -8,9 +8,19 @@ from PIL import Image
 
 from reconstruction.erp import cut_tangent_views, erp_rays
 from reconstruction.mirror import prepare_gs_data
+from reconstruction.pipeline import resolve_caption
 
 
 class ReconstructionContractTests(unittest.TestCase):
+    def test_caption_uses_the_image_sidecar_unless_explicitly_overridden(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            image = Path(tmp) / 'origin.png'
+            self.assertIsNone(resolve_caption(image, None))
+            image.with_name('caption.txt').write_text('  Arcade panorama.\n', encoding='utf-8')
+            self.assertEqual(resolve_caption(image, None), 'Arcade panorama.')
+            self.assertEqual(resolve_caption(image, 'Custom prompt'), 'Custom prompt')
+            self.assertEqual(resolve_caption(image, ''), '')
+
     def test_tangent_prior_matches_radial_depth_and_camera_axes(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

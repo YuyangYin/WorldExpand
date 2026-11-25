@@ -28,7 +28,7 @@ refill all).
 Usage:
     python four_view_dataset/step7_fill_caption.py \\
         --input_dir   four_view_dataset/data_0519/split \\
-        --caption_dir @repo/data/pano_captions \\
+        --caption_dir data/pano_captions \\
         --workers 32
 """
 from __future__ import annotations

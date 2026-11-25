@@ -12,6 +12,15 @@ from worldexpand.cli import need, runtime_env
 from worldexpand.config import REPO_ROOT, load_config, validate_case_id
 
 
+def resolve_caption(image, explicit_caption):
+    if explicit_caption is not None:
+        return explicit_caption
+    caption_file = image.with_name('caption.txt')
+    if caption_file.is_file():
+        return caption_file.read_text(encoding='utf-8').strip()
+    return None
+
+
 def plan(args, config, output):
     paths = config['paths']
     python = paths.get('python', sys.executable)
@@ -100,6 +109,7 @@ def run(args):
     record = plan(args, config, output)
     if not args.image.is_file():
         raise FileNotFoundError(args.image)
+    record['caption'] = resolve_caption(args.image, args.caption)
     if args.dry_run:
         print(json.dumps(record, indent=2))
         return
@@ -114,8 +124,8 @@ def run(args):
     anchor = Path(record['anchor'])
     anchor.parent.mkdir(parents=True)
     Image.fromarray(rgb).save(anchor)
-    if args.caption is not None:
-        (anchor.parent / 'caption.txt').write_text(args.caption + '\n')
+    if record['caption'] is not None:
+        (anchor.parent / 'caption.txt').write_text(record['caption'] + '\n', encoding='utf-8')
     (output / 'commands.json').write_text(json.dumps(record, indent=2) + '\n')
     report = {'status': 'running', 'stages': {}}
     result_path = output / 'result.json'
@@ -160,7 +170,7 @@ def main(argv=None):
     parser.add_argument('--image', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--case-id', default='scene')
-    parser.add_argument('--caption')
+    parser.add_argument('--caption', help='Text prompt override for caption.txt beside the input panorama')
     parser.add_argument('--gpu', default='0', help='One device for depth, NVS, WorldMirror and GS')
     parser.add_argument('--height', type=int, default=1024)
     parser.add_argument('--max-dist-ratio', type=float, default=0.5)
