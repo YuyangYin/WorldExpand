@@ -68,3 +68,5 @@ bash scripts/run_train.sh
 Planning, Generating, and Assembling Composable 3D Worlds
 
 Code and paper coming soon.
+
+[Project website](https://yuyangyin.github.io/Tenon_Web/)
