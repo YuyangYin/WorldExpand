@@ -1,7 +1,5 @@
 # WorldExpand: Sparse joint panorama generation for 3D world expansion
 
-<img src="assets/tenon-logo.png" alt="Tenon logo" width="160">
-
 Yuyang Yin<sup>1,2</sup>, Chenjie Cao<sup>2,†</sup>, Xuhui Zuo<sup>2</sup>, Yuning Gong<sup>2</sup>, Pengfei Wang<sup>2</sup>, Junta Wu<sup>2</sup>, Zhenwei Wang<sup>2</sup>, Yao Zhao<sup>1</sup>, Tengfei Wang<sup>2∗</sup>, Yunchao Wei<sup>1∗</sup>, Chunchao Guo<sup>2∗</sup>
 
 <sup>1</sup> Beijing Jiaotong University · <sup>2</sup> Tencent Hunyuan
@@ -60,3 +58,13 @@ bash scripts/run_train.sh
 ```
 
 `outputs/train/` contains the resolved training configuration, TensorBoard logs, and `checkpoint-*` directories with the trained LoRA weights and mask heads.
+
+## OUR NEXT PROJECT
+
+<img src="assets/tenon-logo.png" alt="Tenon logo" width="160">
+
+### Tenon
+
+Planning, Generating, and Assembling Composable 3D Worlds
+
+Code and paper coming soon.
