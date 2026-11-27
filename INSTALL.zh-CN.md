@@ -112,6 +112,8 @@ export WE_OUTPUT="$PWD/outputs/example-full-attention"
 
 ## 4. 准备训练
 
+训练数据由公司购买，受商业许可限制，无法对外发布。本节涉及的训练代码仅供参考。
+
 四视图训练使用 WorldExpand 主环境。在执行第 1 节的同一个 shell 中，用 `fetch_source` 下载 MoGe 全景工具及其兼容的 `utils3d` 源码。训练入口将两者加入训练子进程的 `PYTHONPATH`。DepthMaster 使用主环境安装的版本。
 
 ```bash

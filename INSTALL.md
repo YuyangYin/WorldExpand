@@ -112,6 +112,8 @@ export WE_OUTPUT="$PWD/outputs/example-full-attention"
 
 ## 4. Prepare training
 
+The company purchased the training data. Commercial licensing restrictions prevent us from releasing it publicly. The training code is provided for reference only.
+
 Use the WorldExpand environment. Call `fetch_source` from section 1 in the same shell to download the MoGe panorama utilities and their matching `utils3d` source. The training launcher adds both directories to the training subprocess's `PYTHONPATH`. DepthMaster uses the version installed in the main environment.
 
 ```bash
